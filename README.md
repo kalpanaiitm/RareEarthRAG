@@ -1,103 +1,72 @@
 # RareEarthRAG
 
-A beginner-friendly Scientific AI project for searching and summarising rare-earth materials research papers.
+A scientific literature retrieval prototype for rare-earth materials chemistry. It extracts text from local PDFs and returns the most relevant passages for a research question using TF-IDF and cosine similarity.
 
-This project is designed as a portfolio project for a Materials Chemistry / Rare Earth Chemistry background transitioning into Agentic AI, Retrieval-Augmented Generation (RAG), and Materials Informatics.
+> **Current status:** retrieval baseline. Despite the project name, this version does not yet generate LLM answers; the roadmap shows how it can develop into a citation-aware RAG system.
 
-## What this project does
+## Why this project
 
-RareEarthRAG lets you:
+Rare-earth research spans synthesis, crystal structures, characterisation and luminescence. Finding comparable details across papers is slow. This project explores how transparent information retrieval can support literature review while using my PhD domain knowledge in rare-earth and solid-state chemistry.
 
-- Add rare-earth chemistry PDF papers
-- Extract text from PDFs
-- Search across papers using similarity search
-- Ask questions such as:
-  - Which compounds show luminescence?
-  - What synthesis methods were used?
-  - Which papers mention powder XRD?
-  - What rare-earth elements are discussed?
-- View the most relevant text snippets from the paper collection
+## Features
 
-This first version uses **TF-IDF similarity search** so it can run without paid APIs or advanced setup.
+- load permitted, text-based research PDFs from a local folder
+- extract and organise paper text
+- build a TF-IDF search index
+- ask natural-language questions
+- retrieve ranked passages with source names and similarity scores
+- run locally without an API key or paid model
 
-## Why this project matters
-
-Rare-earth materials are important in luminescence, solid-state chemistry, phosphors, magnets, energy materials, and advanced functional materials.
-
-This project demonstrates how AI and information retrieval can support scientific literature review and materials discovery.
-
-## Skills demonstrated
-
-- Python
-- Scientific text processing
-- PDF text extraction
-- TF-IDF similarity search
-- Materials Informatics
-- Rare-earth chemistry domain knowledge
-- Streamlit app development
-- Foundation for RAG systems
-
-## Folder structure
+## Retrieval pipeline
 
 ```text
-RareEarthRAG/
-├── app.py
-├── requirements.txt
-├── README.md
-├── data/
-│   └── papers/
-├── src/
-│   ├── pdf_loader.py
-│   ├── search_engine.py
-│   └── utils.py
-└── examples/
-    └── sample_questions.md
-```
-
-## How to run locally
-
-```bash
-git clone https://github.com/YOURUSERNAME/RareEarthRAG.git
-cd RareEarthRAG
-python -m venv venv
-venv\Scripts\activate
-pip install -r requirements.txt
-streamlit run app.py
-```
-
-For Mac/Linux, use:
-
-```bash
-source venv/bin/activate
-```
-
-## Add PDFs
-
-Put PDF research papers inside:
-
-```text
-data/papers/
+Research PDFs → text extraction → document sections → TF-IDF index
+                                                    ↓
+Question → query cleaning → cosine similarity → ranked source passages
 ```
 
 ## Example questions
 
-- Which papers mention rare earth molybdoantimonites?
-- What synthesis methods are discussed?
 - Which compounds show luminescence?
-- What characterisation techniques are used?
+- What synthesis methods are discussed?
 - Which papers mention powder XRD?
 - Which rare-earth elements are present?
+- What crystal structures are described?
+- Which papers mention molybdoantimonites?
 
-## Future improvements
+## Tech stack
 
-- Add sentence-transformer embeddings
-- Add LLM summarisation
-- Add citation-aware answers
-- Add compound extraction
-- Add rare-earth element tagging
-- Add chemistry-specific knowledge graph
-- Add comparison tables for synthesis, structure, and luminescence data
+Python · Streamlit · scikit-learn · PDF text extraction · TF-IDF · cosine similarity
 
-## Author positioning
+## Run locally
 
-Created by a PhD Materials Chemist with rare-earth and solid-state chemistry research experience, building AI tools for scientific knowledge retrieval and materials informatics.
+```bash
+git clone https://github.com/kalpanaiitm/RareEarthRAG.git
+cd RareEarthRAG
+python -m venv .venv
+source .venv/bin/activate  # Windows: .venv\Scripts\activate
+pip install -r requirements.txt
+streamlit run app.py
+```
+
+Place papers you are permitted to use in `data/papers/`. Do not commit copyrighted, confidential or unpublished documents.
+
+## Limitations
+
+- scanned PDFs require OCR
+- lexical retrieval can miss conceptually similar passages with different wording
+- the current version retrieves passages rather than generating answers
+- retrieval quality has not yet been benchmarked
+
+## Roadmap
+
+- compare TF-IDF with sentence-transformer embeddings
+- add a labelled retrieval evaluation set
+- generate answers grounded in retrieved passages
+- attach source citations to every answer
+- extract compounds, synthesis conditions and luminescence data
+- explore a chemistry-specific knowledge graph
+
+## About the builder
+
+Created by Dr Kalpana Govindarasan, a materials chemist transitioning into applied AI. This project connects rare-earth chemistry expertise with scientific information retrieval and responsible RAG development.
