@@ -19,6 +19,8 @@ def extract_text_from_pdf(pdf_path: Path) -> str:
 
 def split_text_into_chunks(text: str, chunk_size: int = 1200, overlap: int = 200) -> List[str]:
     """Split long text into overlapping chunks for search."""
+    if chunk_size <= 0 or overlap < 0 or overlap >= chunk_size:
+        raise ValueError("Expected chunk_size > overlap >= 0.")
     if not text:
         return []
     chunks = []
@@ -28,6 +30,8 @@ def split_text_into_chunks(text: str, chunk_size: int = 1200, overlap: int = 200
         chunk = text[start:end]
         if chunk.strip():
             chunks.append(chunk.strip())
+        if end >= len(text):
+            break
         start = end - overlap
     return chunks
 

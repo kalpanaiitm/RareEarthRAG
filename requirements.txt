@@ -1,5 +1,6 @@
 streamlit
 pypdf
 scikit-learn
+pytest
 pandas
 numpy
