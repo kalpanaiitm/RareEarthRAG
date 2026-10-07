@@ -1,15 +1,24 @@
+import io
+import re
 from pathlib import Path
-from typing import List, Dict
+from typing import BinaryIO, Dict, List, Union
+
 from pypdf import PdfReader
+
+PAGE_MARKER = re.compile(r"--- Page (\d+) ---")
+
+
+def _read_pdf_pages(source: Union[str, Path, BinaryIO]) -> List[str]:
+    """Return the text of each page; empty pages are kept so page numbers stay correct."""
+    reader = PdfReader(source)
+    return [page.extract_text() or "" for page in reader.pages]
 
 
 def extract_text_from_pdf(pdf_path: Path) -> str:
-    """Extract text from a PDF file."""
+    """Extract text from a PDF file, with a marker before each page."""
     text_parts = []
     try:
-        reader = PdfReader(str(pdf_path))
-        for page_number, page in enumerate(reader.pages, start=1):
-            page_text = page.extract_text() or ""
+        for page_number, page_text in enumerate(_read_pdf_pages(str(pdf_path)), start=1):
             if page_text.strip():
                 text_parts.append(f"\n--- Page {page_number} ---\n{page_text}")
     except Exception as error:
@@ -36,13 +45,43 @@ def split_text_into_chunks(text: str, chunk_size: int = 1200, overlap: int = 200
     return chunks
 
 
-def load_papers_from_folder(folder_path: Path) -> List[Dict[str, str]]:
-    """Load all PDF papers from a folder and return searchable text chunks."""
+def chunk_pages(source: str, pages: List[str], chunk_size: int = 1200, overlap: int = 200) -> List[Dict]:
+    """Chunk each page separately so every passage carries its page number."""
     documents = []
-    pdf_files = list(folder_path.glob("*.pdf"))
-    for pdf_file in pdf_files:
-        full_text = extract_text_from_pdf(pdf_file)
-        chunks = split_text_into_chunks(full_text)
-        for chunk in chunks:
-            documents.append({"source": pdf_file.name, "text": chunk})
+    for page_number, page_text in enumerate(pages, start=1):
+        for chunk in split_text_into_chunks(page_text, chunk_size, overlap):
+            documents.append({"source": source, "page": page_number, "text": chunk})
+    return documents
+
+
+def load_pdf_bytes(name: str, data: bytes) -> List[Dict]:
+    """Load an uploaded PDF held in memory. Nothing is written to disk."""
+    return chunk_pages(name, _read_pdf_pages(io.BytesIO(data)))
+
+
+def load_text_file(path: Path) -> List[Dict]:
+    """Load a Markdown or text note, splitting on blank lines into paragraph passages."""
+    text = path.read_text(encoding="utf-8")
+    paragraphs = [p.strip() for p in re.split(r"\n\s*\n", text) if p.strip()]
+    title = paragraphs[0].lstrip("# ").strip() if paragraphs else path.stem
+    documents = []
+    for paragraph in paragraphs[1:]:
+        if paragraph.startswith("Written for the RareEarthRAG demo"):
+            continue
+        documents.append({"source": title, "page": None, "text": paragraph})
+    return documents
+
+
+def load_papers_from_folder(folder_path: Path) -> List[Dict]:
+    """Load all PDFs (and .md/.txt notes) from a folder and return searchable passages."""
+    documents = []
+    for pdf_file in sorted(folder_path.glob("*.pdf")):
+        try:
+            documents.extend(chunk_pages(pdf_file.name, _read_pdf_pages(str(pdf_file))))
+        except Exception as error:
+            print(f"Could not read {pdf_file.name}: {error}")
+    for note in sorted(list(folder_path.glob("*.md")) + list(folder_path.glob("*.txt"))):
+        if note.name.lower() == "readme.md":
+            continue
+        documents.extend(load_text_file(note))
     return documents
