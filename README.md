@@ -2,7 +2,7 @@
 
 **Find the passages that answer your question across rare-earth materials papers, with the source and page for every result.**
 
-[**Try the live demo →**](https://rareearthrag.streamlit.app/) · No sign-up · No API key · Uploaded PDFs are not stored
+[**Try the live demo →**](https://rareearthrag-capbrkuce3iesfc6zngwrl.streamlit.app/) · No sign-up · No API key · Uploaded PDFs are not stored
 
 ---
 
