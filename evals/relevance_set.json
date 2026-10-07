@@ -1,0 +1,17 @@
+[
+  {"question": "Which ion gives red emission and how is site symmetry probed?", "relevant": "Demo note 01: Luminescence of trivalent lanthanide ions"},
+  {"question": "Why are 4f emission lines sharp?", "relevant": "Demo note 01: Luminescence of trivalent lanthanide ions"},
+  {"question": "What causes concentration quenching?", "relevant": "Demo note 01: Luminescence of trivalent lanthanide ions"},
+  {"question": "How is hydrothermal synthesis carried out?", "relevant": "Demo note 02: Synthesis routes for rare-earth inorganic materials"},
+  {"question": "Why use sealed silica tubes for Sb2O3 reactions?", "relevant": "Demo note 02: Synthesis routes for rare-earth inorganic materials"},
+  {"question": "Which papers mention powder XRD and Rietveld refinement?", "relevant": "Demo note 03: Characterisation of rare-earth materials"},
+  {"question": "How are lifetime and quantum yield measured?", "relevant": "Demo note 03: Characterisation of rare-earth materials"},
+  {"question": "What is the lanthanide contraction?", "relevant": "Demo note 04: Lanthanide contraction and crystal structures"},
+  {"question": "Why is yttrium used as a host?", "relevant": "Demo note 04: Lanthanide contraction and crystal structures"},
+  {"question": "Which papers mention molybdoantimonites?", "relevant": "Demo note 05: Molybdates, antimonites and mixed-anion host frameworks"},
+  {"question": "What does the Sb3+ lone pair do to the structure?", "relevant": "Demo note 05: Molybdates, antimonites and mixed-anion host frameworks"},
+  {"question": "How do white LEDs use phosphors?", "relevant": "Demo note 06: Applications of rare-earth materials and supply concerns"},
+  {"question": "How are rare-earth elements separated industrially?", "relevant": "Demo note 06: Applications of rare-earth materials and supply concerns"},
+  {"question": "Where does the charge-transfer band in molybdates come from?", "relevant": "Demo note 05: Molybdates, antimonites and mixed-anion host frameworks"},
+  {"question": "Which method shows particle morphology?", "relevant": "Demo note 03: Characterisation of rare-earth materials"}
+]
